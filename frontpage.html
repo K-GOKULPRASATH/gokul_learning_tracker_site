@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GOKULPRASATH K| Java Backend Learner</title>
+  <link rel="stylesheet" href="frontpage.css" />
+</head>
+<body>
+  <header class="container">
+    <h1>GOKULPRASATH K</h1>
+    <p class="tagline">Aspiring Java Backend Developer</p>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#progress">Progress</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section id="about">
+      <h2>About</h2>
+      <p>Third-year student building backend skills in Java → Maven/JUnit → Spring Boot → DB → AWS.</p>
+    </section>
+
+    <section id="progress">
+      <h2>Learning Progress</h2>
+      <div class="bar"><span style="--p:60%">Java Basics — 60%</span></div>
+      <div class="bar"><span style="--p:20%">Maven & JUnit — 20%</span></div>
+      <div class="bar"><span style="--p:0%">Spring Boot — 0%</span></div>
+      <div class="bar"><span style="--p:0%">PostgreSQL — 0%</span></div>
+      <div class="bar"><span style="--p:0%">AWS — 0%</span></div>
+      <p class="hint">Update these numbers daily. We’ll wire this to your Java API later.</p>
+    </section>
+
+    <section id="projects">
+      <h2>Projects</h2>
+      <ul class="cards">
+        <li>
+          <h3>Skill Tracker (CLI)</h3>
+          <p>Java console app storing skills to a file. First step to backend.</p>
+        </li>
+        <li>
+          <h3>Coming Soon</h3>
+          <p>Spring Boot REST API to power this site.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <ul>
+        <li><a href="https://github.com/YOURUSERNAME" target="_blank">GitHub</a></li>
+        <li><a href="mailto:youremail@example.com">Email</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="container">
+    <small>© <span id="year"></span> GOKULPRASATH K — Built with HTML & CSS</small>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
