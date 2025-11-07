@@ -3,66 +3,164 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GOKULPRASATH K| Java Backend Learner</title>
-  <link rel="stylesheet" href="frontpage.css" />
+  <title>Gokul • Java Backend Journey</title>
+  <meta name="description" content="Gokul's portfolio and learning tracker: Java → Spring Boot → DB → AWS" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="container">
-    <h1>GOKULPRASATH K</h1>
-    <p class="tagline">Aspiring Java Backend Developer</p>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#progress">Progress</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-    </nav>
+  <!-- Header / Nav -->
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="#home">Gokul</a>
+      <nav>
+  <a href="#about">About</a>
+  <a href="#progress">Progress</a>
+  <a href="#projects">Projects</a>
+  <a href="#contact">Contact</a>
+  <!-- New: learning pages -->
+  <a href="dashboard.html">Dashboard</a>
+</nav>
+
+    </div>
   </header>
 
-  <main class="container">
-    <section id="about">
-      <h2>About</h2>
-      <p>Third-year student building backend skills in Java → Maven/JUnit → Spring Boot → DB → AWS.</p>
-    </section>
+  <!-- Hero -->
+  <section id="home" class="hero container">
+    <h1>Java Backend Developer in the making 🚀</h1>
+    <p class="lead">
+      Third-year CS&BS student documenting my daily grind: <b>Java → Maven/JUnit → Spring Boot → PostgreSQL → AWS</b>.
+    </p>
+    <div class="cta-row">
+      <a class="btn" href="#progress">See my progress</a>
+      <a class="btn ghost" href="#projects">View projects</a>
+    </div>
+  </section>
 
-    <section id="progress">
-      <h2>Learning Progress</h2>
-      <div class="bar"><span style="--p:60%">Java Basics — 60%</span></div>
-      <div class="bar"><span style="--p:20%">Maven & JUnit — 20%</span></div>
-      <div class="bar"><span style="--p:0%">Spring Boot — 0%</span></div>
-      <div class="bar"><span style="--p:0%">PostgreSQL — 0%</span></div>
-      <div class="bar"><span style="--p:0%">AWS — 0%</span></div>
-      <p class="hint">Update these numbers daily. We’ll wire this to your Java API later.</p>
-    </section>
+  <!-- About -->
+  <section id="about" class="container section">
+    <h2>About me</h2>
+    <p>
+      I’m Gokul — learning backend the practical way: ship small, daily. Ex-ZF Wind Power (material flow & Kaizen),
+      now focused on software: Java fundamentals, testing, Spring, databases, and AWS cloud.
+    </p>
+    <ul class="bullets">
+      <li>Strong at breaking systems into small parts and fixing them</li>
+      <li>Currently practicing DSA with Take U Forward</li>
+      <li>Building a personal “mini-LeetCode + tracker” for consistency</li>
+    </ul>
+  </section>
 
-    <section id="projects">
-      <h2>Projects</h2>
-      <ul class="cards">
-        <li>
-          <h3>Skill Tracker (CLI)</h3>
-          <p>Java console app storing skills to a file. First step to backend.</p>
-        </li>
-        <li>
-          <h3>Coming Soon</h3>
-          <p>Spring Boot REST API to power this site.</p>
-        </li>
-      </ul>
-    </section>
+  <!-- Progress -->
+  <section id="progress" class="container section">
+  <h2>Learning progress</h2>
+  <p class="muted">
+    Update these numbers in the HTML (data-perc=".."). We’ll connect to a Java API later.
+    • <a href="dashboard.html">View dashboard</a>
+  </p>
 
-    <section id="contact">
-      <h2>Contact</h2>
-      <ul>
-        <li><a href="https://github.com/YOURUSERNAME" target="_blank">GitHub</a></li>
-        <li><a href="mailto:youremail@example.com">Email</a></li>
-      </ul>
-    </section>
-  </main>
+  <!-- Java Core is clickable -->
+  <div class="progress">
+    <a class="progress-link" href="java-core.html" title="Open Java Core practice">
+      <label>Java Core</label>
+      <div class="bar"><span data-perc="60">60%</span></div>
+    </a>
+  </div>
 
-  <footer class="container">
-    <small>© <span id="year"></span> GOKULPRASATH K — Built with HTML & CSS</small>
+  <!-- Future items are placeholders for now -->
+  <div class="progress">
+    <a class="progress-link disabled" href="#" title="Unlock Maven & JUnit after Java Core">
+      <label>Maven & JUnit5 / Mockito</label>
+      <div class="bar"><span data-perc="20">20%</span></div>
+    </a>
+  </div>
+
+  <div class="progress">
+    <a class="progress-link disabled" href="#" title="Unlock Spring Boot soon">
+      <label>Spring Boot</label>
+      <div class="bar"><span data-perc="0">0%</span></div>
+    </a>
+  </div>
+
+  <div class="progress">
+    <a class="progress-link disabled" href="#" title="Unlock PostgreSQL after Spring">
+      <label>PostgreSQL</label>
+      <div class="bar"><span data-perc="0">0%</span></div>
+    </a>
+  </div>
+
+  <div class="progress">
+    <a class="progress-link disabled" href="#" title="Unlock AWS after DB">
+      <label>AWS (EC2, API Gateway, S3, Lambda)</label>
+      <div class="bar"><span data-perc="0">0%</span></div>
+    </a>
+  </div>
+</section>
+
+
+  <!-- Projects -->
+  <section id="projects" class="container section">
+    <h2>Projects</h2>
+
+    <div class="cards">
+      <article class="card">
+        <h3>Skill Tracker (CLI)</h3>
+        <p>Java console app that writes/reads progress from a file. First step toward backend.</p>
+        <ul class="tags">
+          <li>Java</li><li>File I/O</li><li>OOP</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>Learning Tracker API (planned)</h3>
+        <p>Spring Boot REST + PostgreSQL. The site will fetch skills via <code>/api/skills</code>.</p>
+        <ul class="tags">
+          <li>Spring Boot</li><li>JPA</li><li>PostgreSQL</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>AWS Serverless Judge (idea)</h3>
+        <p>API Gateway → Lambda (Java 17) → S3 (submissions) → DynamoDB (results) → CloudWatch.</p>
+        <ul class="tags">
+          <li>API GW</li><li>Lambda</li><li>S3</li><li>DynamoDB</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="container section">
+    <h2>Contact</h2>
+    <ul class="contact">
+      <li><a target="_blank" href="https://github.com/K-GOKULPRASATH">GitHub</a></li>
+      <li><a href="mailto:youremail@example.com">Email me</a></li>
+      <li><a target="_blank" href="https://k-gokulprasath.github.io/gokul_learning_tracker_site/">Live site</a></li>
+    </ul>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> Gokul • Built with HTML & CSS</small>
+    </div>
   </footer>
 
   <script>
+    // year + progress widths
     document.getElementById('year').textContent = new Date().getFullYear();
+    document.querySelectorAll('.bar span').forEach(el => {
+      const p = Math.max(0, Math.min(100, +el.dataset.perc || 0));
+      el.style.width = p + '%';
+      el.textContent = p + '%';
+    });
+
+    // smooth anchor scroll (basic)
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href').slice(1);
+        const el = document.getElementById(id);
+        if (el) { e.preventDefault(); el.scrollIntoView({behavior:'smooth', block:'start'}); }
+      });
+    });
   </script>
 </body>
 </html>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Dashboard • Java Core</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="index.html">Gokul</a>
+    <nav>
+      <a href="java-core.html">Java Core</a>
+      <a href="index.html#projects">Projects</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container section">
+  <h1>Performance Dashboard</h1>
+  <div id="summary" class="cards"></div>
+
+  <h2 style="margin-top:24px;">Per-Topic Performance</h2>
+  <div id="topics" class="cards"></div>
+
+  <h2 style="margin-top:24px;">Recent Activity</h2>
+  <div id="recent" class="panel"><ul id="recentList" class="problem-list"></ul></div>
+</main>
+
+<footer class="site-footer">
+  <div class="container"><small>© <span id="year"></span> Gokul</small></div>
+</footer>
+
+<script src="js/core.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  Core.renderDashboard({
+    problemsUrl: 'data/java-core.json',
+    trackKey: 'jc_progress',
+    summaryEl: '#summary',
+    topicsEl: '#topics',
+    recentEl: '#recentList'
+  });
+</script>
+</body>
+</html>

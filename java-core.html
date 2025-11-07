@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Java Core • Practice</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="index.html">Gokul</a>
+    <nav>
+      <a href="index.html#about">About</a>
+      <a href="index.html#progress">Progress</a>
+      <a href="index.html#projects">Projects</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container section">
+  <h1>Java Core – Practice</h1>
+  <p class="muted">Pick a problem → read statement → enter outputs for the shown test cases → Submit. We’ll record your attempts and passes locally.</p>
+
+  <div class="practice-layout">
+    <aside class="panel">
+      <input id="search" class="input" placeholder="Search problems..."/>
+      <ul id="problemList" class="problem-list"></ul>
+    </aside>
+
+    <section class="panel">
+      <div id="problemView" class="problem-view">
+        <p>Select a problem on the left to begin.</p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container"><small>© <span id="year"></span> Gokul</small></div>
+</footer>
+
+<script src="js/core.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  Core.initPractice({
+    problemsUrl: 'data/java-core.json',
+    listEl: '#problemList',
+    viewEl: '#problemView',
+    searchEl: '#search',
+    trackKey: 'jc_progress'
+  });
+</script>
+</body>
+</html>

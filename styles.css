@@ -1,16 +1,179 @@
-* { box-sizing: border-box; }
-body { margin: 0; font-family: system-ui, Arial, sans-serif; line-height: 1.6; }
-.container { max-width: 940px; margin: 0 auto; padding: 16px; }
-header { padding: 24px 16px; border-bottom: 1px solid #eee; }
-h1 { margin: 0; font-size: 28px; }
-.tagline { margin: 4px 0 12px; color: #555; }
-nav a { margin-right: 12px; text-decoration: none; color: #0a58ca; }
-nav a:hover { text-decoration: underline; }
-section { padding: 24px 0; border-bottom: 1px solid #f3f3f3; }
-h2 { margin: 0 0 12px; font-size: 22px; }
-.cards { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
-.cards li { border: 1px solid #eee; border-radius: 10px; padding: 12px; }
-.bar { background: #f3f3f3; border-radius: 10px; margin: 8px 0; overflow: hidden; }
-.bar span { display: block; padding: 6px 10px; background: linear-gradient(90deg, #9ec5fe, #a3cfbb); width: var(--p); color: #0b2239; font-weight: 600; }
-.hint { color: #666; font-size: 14px; }
-footer { color: #777; }
+:root{
+  --bg:#0b0f14;
+  --panel:#121824;
+  --text:#e8f0ff;
+  --muted:#a5b3ce;
+  --brand:#7aa2ff;
+  --brand2:#7ff1c8;
+  --border:#1e2633;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif}
+a{color:var(--brand);text-decoration:none;transition:color 0.3s ease;}
+a:hover{text-decoration:none;color:var(--brand2);}
+.container{max-width:980px;margin:0 auto;padding:16px}
+.section{padding:48px 16px;border-top:1px solid var(--border)}
+.muted{color:var(--muted);font-size:14px}
+
+/* ===== NAVIGATION ===== */
+.site-header{
+  position:sticky;
+  top:0;
+  background:rgba(11,15,20,.9);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border);
+  z-index:10;
+  box-shadow:0 2px 6px rgba(0,0,0,0.4);
+}
+.nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+}
+.brand{
+  font-weight:800;
+  letter-spacing:.4px;
+  font-size:20px;
+  color:var(--brand2);
+}
+nav a{
+  position:relative;
+  font-weight:600;
+  color:var(--text);
+  margin-left:20px;
+  transition:color .3s ease;
+}
+nav a::after{
+  content:'';
+  position:absolute;
+  bottom:-5px;
+  left:0;
+  width:0;
+  height:2px;
+  background:linear-gradient(90deg,var(--brand),var(--brand2));
+  border-radius:2px;
+  transition:width .3s ease;
+}
+nav a:hover{
+  color:var(--brand);
+}
+nav a:hover::after{
+  width:100%;
+}
+
+/* ===== FOOTER ===== */
+.site-footer{border-top:1px solid var(--border);padding:16px 0;background:#0b0f14;text-align:center;}
+
+/* ===== HERO SECTION ===== */
+.hero{padding:56px 16px;text-align:center;}
+.hero h1{margin:0 0 8px;font-size:clamp(28px,4vw,40px)}
+.lead{color:var(--muted);max-width:60ch;margin:0 auto;}
+.cta-row{display:flex;gap:12px;margin-top:20px;justify-content:center;flex-wrap:wrap}
+.btn{
+  display:inline-block;
+  padding:10px 16px;
+  border-radius:10px;
+  background:linear-gradient(90deg,var(--brand),var(--brand2));
+  color:#071018;
+  font-weight:700;
+  border:0;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 4px 10px rgba(0,0,0,0.4);
+}
+.btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text);}
+
+/* ===== ABOUT ===== */
+.bullets{margin:12px 0 0 0;padding-left:18px}
+.bullets li{margin:6px 0}
+
+/* ===== PROGRESS ===== */
+.progress{margin:18px 0}
+.progress label{display:block;margin-bottom:6px;color:#cfe1ff}
+.bar{background:#0e1420;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.bar span{
+  display:block;
+  padding:8px 10px;
+  background:linear-gradient(90deg,var(--brand),var(--brand2));
+  color:#03121a;
+  font-weight:800;
+  width:0;
+  transition:width .6s ease;
+}
+
+/* ===== PROJECTS ===== */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:12px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:14px;transition:transform .25s ease,box-shadow .25s ease;}
+.card:hover{transform:translateY(-4px);box-shadow:0 6px 14px rgba(0,0,0,0.5);}
+.card h3{margin:4px 0 6px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0;padding:0;list-style:none}
+.tags li{font-size:12px;border:1px solid var(--border);border-radius:999px;padding:4px 8px;color:var(--muted)}
+
+/* ===== CONTACT ===== */
+.contact{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+.roadmap{margin-top:12px}
+
+/* Practice layout */
+.practice-layout{display:grid;grid-template-columns:280px 1fr;gap:16px}
+@media (max-width: 800px){ .practice-layout{grid-template-columns:1fr} }
+
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:12px}
+.input{width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:#0e1420;color:var(--text);margin-bottom:10px}
+
+.problem-list{list-style:none;margin:0;padding:0;max-height:60vh;overflow:auto}
+.problem-list li{margin:4px 0}
+.problem-list .link{width:100%;text-align:left;background:transparent;color:var(--text);border:1px solid var(--border);padding:8px 10px;border-radius:10px;cursor:pointer}
+.problem-list .link:hover{border-color:var(--brand)}
+
+.problem-view .case{margin:10px 0}
+.problem-view code{background:#0e1420;padding:2px 6px;border-radius:6px;border:1px solid var(--border)}
+.attempt .btn{margin-top:8px}
+
+/* === Clickable progress items (hover effects) === */
+.progress .progress-link {
+  display: block;
+  padding: 10px 14px;
+  border-radius: 14px;
+  text-decoration: none;
+  color: inherit;
+  transition: 
+    background 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.progress .progress-link:hover {
+  background: linear-gradient(90deg, rgba(122,162,255,0.15), rgba(127,241,200,0.15));
+  transform: translateY(-3px);
+  box-shadow: 0 4px 14px rgba(122,162,255,0.2);
+}
+
+.progress .progress-link:hover label {
+  color: var(--brand2);
+  letter-spacing: 0.3px;
+  transition: color 0.25s ease, letter-spacing 0.25s ease;
+}
+
+.progress .progress-link.disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Smooth bar animation for better look */
+.progress .bar span {
+  display: block;
+  padding: 8px 10px;
+  background: linear-gradient(90deg, var(--brand), var(--brand2));
+  color: #03121a;
+  font-weight: 800;
+  width: 0;
+  transition: width 0.8s ease, background 0.5s ease;
+}
+
+.progress .progress-link:hover .bar span {
+  background: linear-gradient(90deg, var(--brand2), var(--brand));
+}
