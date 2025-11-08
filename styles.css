@@ -177,3 +177,12 @@ nav a:hover::after{
 .progress .progress-link:hover .bar span {
   background: linear-gradient(90deg, var(--brand2), var(--brand));
 }
+
+
+.editor-wrap{position:relative}
+.editor-lock{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  border-radius:10px; background:rgba(0,0,0,.35);
+  border:1px dashed var(--border); cursor:default; font-weight:700; text-align:center; padding:0 12px;
+}
+

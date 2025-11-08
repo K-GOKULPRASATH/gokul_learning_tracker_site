@@ -27,53 +27,34 @@ const Core = (() => {
     });
   }
 
+  // kept for future use (not used after switching to editor panel)
   function normalize(s) {
     return (s || '').trim().replace(/\s+/g, ' ').toLowerCase();
   }
 
   function renderProblem(viewEl, p, trackKey, progress) {
+    // Build the problem view + code editor panel (no input boxes)
     viewEl.innerHTML = `
-      <h2>${p.title}</h2>
-      <p class="muted">${p.topic} • ${p.difficulty}</p>
-      <p>${p.statement}</p>
-      <details class="roadmap"><summary>Hint/Idea</summary><p>${p.explain || ''}</p></details>
-      <form id="attemptForm" class="attempt">
-        ${p.tests.map((t, i) => `
-          <div class="case">
-            <label>Test ${i + 1}: <code>${t.input}</code></label>
-            <input class="input" data-i="${i}" placeholder="Your output"/>
-            <div class="expected muted">Expected format: <code>${t.expected}</code></div>
-          </div>
-        `).join('')}
-        <button class="btn" type="submit">Submit</button>
-      </form>
-      <div id="verdict" class="panel" style="margin-top:12px;"></div>
-    `;
+  <h2>${p.title}</h2>
+  <p class="muted">${p.topic} • ${p.difficulty}</p>
+  <p>${p.statement}</p>
+  <details class="roadmap"><summary>Hint/Idea</summary><p>${p.explain || ''}</p></details>
 
-    const form = viewEl.querySelector('#attemptForm');
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const answers = [...form.querySelectorAll('input')].map(i => i.value);
-      let passAll = true;
-      const results = [];
-      for (let i = 0; i < p.tests.length; i++) {
-        const ok = normalize(answers[i]) === normalize(p.tests[i].expected);
-        results.push(ok);
-        if (!ok) passAll = false;
-      }
-      const ver = viewEl.querySelector('#verdict');
-      ver.innerHTML = passAll
-        ? `<b>All tests passed ✅</b>`
-        : `<b>Some tests failed ❌</b><br/>` + results.map((ok, idx) => `Test ${idx + 1}: ${ok ? '✅' : '❌'}`).join(' • ');
+  <div class="code-editor-panel">
+    <h2>Code Editor</h2>
+    <div class="editor-wrap">
+      <div id="editor" style="height:400px;border:1px solid #444;border-radius:10px;"></div>
+      ${window.IS_OWNER ? '' : '<div id="editorLock" class="editor-lock">Owner can only access to solve the problems</div>'}
+    </div>
+    <button id="runBtn" class="btn" style="margin-top:10px;">Run Code</button>
+    <div id="outputBox" class="panel" style="margin-top:10px;">Output will appear here...</div>
+  </div>
+`;
 
-      // update progress
-      const stat = progress[p.id] || { attempts: 0, passes: 0, last: null };
-      stat.attempts += 1;
-      if (passAll) stat.passes += 1;
-      stat.last = Date.now();
-      progress[p.id] = stat;
-      Store.set(trackKey, progress);
-    });
+if (typeof window.setupEditor === 'function') window.setupEditor();
+
+// if locked, clicking the overlay does nothing here (unlock is via brand)
+
   }
 
   function filterProblems(list, q) {

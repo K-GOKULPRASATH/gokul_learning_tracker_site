@@ -9,7 +9,8 @@
 <body>
 <header class="site-header">
   <div class="container nav">
-    <a class="brand" href="index.html">Gokul</a>
+    <!-- add id="brand" so we can attach the unlock shortcut -->
+    <a id="brand" class="brand" href="index.html">GOKULPRASATH K</a>
     <nav>
       <a href="index.html#about">About</a>
       <a href="index.html#progress">Progress</a>
@@ -21,7 +22,7 @@
 
 <main class="container section">
   <h1>Java Core – Practice</h1>
-  <p class="muted">Pick a problem → read statement → enter outputs for the shown test cases → Submit. We’ll record your attempts and passes locally.</p>
+  <p class="muted">Pick a problem → read statement → solve it in the code editor → Run. Your attempts are local for now.</p>
 
   <div class="practice-layout">
     <aside class="panel">
@@ -41,9 +42,63 @@
   <div class="container"><small>© <span id="year"></span> Gokul</small></div>
 </footer>
 
+<!-- ===== Owner toggle (temporary until reload) ===== -->
+<script>
+  // start locked
+  window.IS_OWNER = false;
+
+  function applyOwnerState() {
+    const lock = document.getElementById('editorLock');
+    if (lock) lock.remove();
+
+    if (window.editor && typeof window.editor.updateOptions === 'function') {
+      window.editor.updateOptions({ readOnly: !window.IS_OWNER });
+    }
+    const host = document.getElementById('editor');
+    if (host) host.style.pointerEvents = window.IS_OWNER ? 'auto' : 'none';
+
+    const out = document.getElementById('outputBox');
+    if (out && window.IS_OWNER) out.textContent = '🔓 Owner mode enabled (until reload).';
+  }
+
+  function activateOwnerOnce() {
+    if (window.IS_OWNER) return;
+    window.IS_OWNER = true;
+    applyOwnerState();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // year
+    const y = document.getElementById('year');
+    if (y) y.textContent = new Date().getFullYear();
+
+    // brand unlock: double-click OR Ctrl+Click
+    const brand = document.getElementById('brand');
+    if (brand) {
+      brand.addEventListener('dblclick', (e) => { e.preventDefault(); activateOwnerOnce(); });
+      brand.addEventListener('click', (e) => {
+        if (e.ctrlKey) { e.preventDefault(); activateOwnerOnce(); }
+      });
+    }
+
+    // keyboard unlock: Ctrl + Shift + O
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.shiftKey && (e.key === 'O' || e.key === 'o')) {
+        e.preventDefault();
+        activateOwnerOnce();
+      }
+    });
+  });
+
+  // allow other scripts to re-apply after render
+  window.__applyOwnerState = applyOwnerState;
+</script>
+
+<!-- ===== App scripts (load Monaco once, then your JS) ===== -->
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs/loader.min.js"></script>
+<script src="js/editor.js"></script>
 <script src="js/core.js"></script>
 <script>
-  document.getElementById('year').textContent = new Date().getFullYear();
   Core.initPractice({
     problemsUrl: 'data/java-core.json',
     listEl: '#problemList',
