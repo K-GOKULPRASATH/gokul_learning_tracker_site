@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Maven & JUnit • Practice</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav">
+    <a id="brand" class="brand" href="index.html">GOKULPRASATH K</a>
+    <nav>
+      <a href="index.html#about">About</a>
+      <a href="index.html#progress">Progress</a>
+      <a href="index.html#projects">Projects</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container section">
+  <h1>Maven & JUnit5 / Mockito – Practice</h1>
+  <p class="muted">Pick a problem → read statement → solve it in the code editor → Run (mock for now).</p>
+
+  <div class="practice-layout">
+    <aside class="panel">
+      <input id="search" class="input" placeholder="Search problems..."/>
+      <ul id="problemList" class="problem-list"></ul>
+    </aside>
+
+    <section class="panel">
+      <div id="problemView" class="problem-view">
+        <p>Select a problem on the left to begin.</p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container"><small>© <span id="year"></span> Gokul</small></div>
+</footer>
+
+<!-- temp owner: locked until you Ctrl+Click or dbl-click the logo -->
+<script>
+  window.IS_OWNER = false;
+  function applyOwnerState(){
+    const lock = document.getElementById('editorLock'); if (lock) lock.remove();
+    if (window.editor?.updateOptions) window.editor.updateOptions({ readOnly: !window.IS_OWNER });
+    const host = document.getElementById('editor'); if (host) host.style.pointerEvents = window.IS_OWNER ? 'auto' : 'none';
+    const out = document.getElementById('outputBox'); if (out && window.IS_OWNER) out.textContent = '🔓 Owner mode (until reload).';
+  }
+  function activateOwnerOnce(){ if(window.IS_OWNER) return; window.IS_OWNER = true; applyOwnerState(); }
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const brand = document.getElementById('brand');
+    if (brand){
+      brand.addEventListener('dblclick', e=>{e.preventDefault(); activateOwnerOnce();});
+      brand.addEventListener('click', e=>{ if(e.ctrlKey){ e.preventDefault(); activateOwnerOnce(); }});
+    }
+    document.addEventListener('keydown', e=>{
+      if(e.ctrlKey && e.shiftKey && (e.key==='O'||e.key==='o')){ e.preventDefault(); activateOwnerOnce(); }
+    });
+  });
+  window.__applyOwnerState = applyOwnerState;
+</script>
+
+<!-- scripts -->
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs/loader.min.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/core.js"></script>
+<script>
+  Core.initPractice({
+    problemsUrl: 'data/maven-junit.json',   // <— new dataset
+    listEl: '#problemList',
+    viewEl: '#problemView',
+    searchEl: '#search',
+    trackKey: 'mj_progress'                  // <— separate progress key
+  });
+</script>
+</body>
+</html>

@@ -57,7 +57,12 @@
             }
           };
         }
+        if (window.CURRENT_PROBLEM?.starterCode?.java) {
+  editor.setValue(window.CURRENT_PROBLEM.starterCode.java);
+}
+
       };
+      
 
       // expose unlock re-apply (called from html script)
       window.unlockEditorNow = function () {

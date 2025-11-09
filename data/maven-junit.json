@@ -1,0 +1,105 @@
+[
+  {
+    "id": "maven-coordinates",
+    "title": "Maven Coordinates",
+    "topic": "Maven",
+    "difficulty": "Easy",
+    "constraints": ["Basic POM structure"],
+    "statement": "Fill the standard Maven coordinates for a library project.",
+    "examples": [
+      { "input": "groupId=io.gokul.learn, artifactId=core-utils, version=1.0.0", "output": "ok" }
+    ],
+    "tests": [
+      { "input": "groupId=io.gokul.learn,artifactId=core-utils,version=1.0.0", "expected": "ok" }
+    ],
+    "starterCode": {
+      "java": "/* POM snippet (for reference only)\n<groupId>io.gokul.learn</groupId>\n<artifactId>core-utils</artifactId>\n<version>1.0.0</version>\n*/\nclass Notes { public static void main(String[] args){ System.out.println(\"ok\"); } }"
+    },
+    "explain": "groupId usually reversed domain; artifactId is module name; version follows semver."
+  },
+  {
+    "id": "maven-dependency-scope",
+    "title": "Dependency Scope",
+    "topic": "Maven",
+    "difficulty": "Easy",
+    "statement": "Choose the correct Maven scope for JUnit 5 dependency used only during testing.",
+    "examples": [
+      { "input": "junit-jupiter scope", "output": "test" }
+    ],
+    "tests": [
+      { "input": "junit-jupiter scope", "expected": "test" }
+    ],
+    "starterCode": {
+      "java": "/* Expected Maven snippet:\n<dependency>\n  <groupId>org.junit.jupiter</groupId>\n  <artifactId>junit-jupiter</artifactId>\n  <version>5.10.0</version>\n  <scope>test</scope>\n</dependency>\n*/\nclass Notes { public static void main(String[] args){ System.out.println(\"test\"); } }"
+    },
+    "explain": "JUnit is only needed at test runtime, so use scope \"test\"."
+  },
+  {
+    "id": "junit5-basic-assertions",
+    "title": "JUnit5 Basic Assertions",
+    "topic": "JUnit5",
+    "difficulty": "Easy",
+    "statement": "Write a JUnit 5 test that asserts sum(2,3) == 5 using Assertions.assertEquals.",
+    "examples": [
+      { "input": "assertEquals for 2+3", "output": "ok" }
+    ],
+    "tests": [
+      { "input": "assertEquals for 2+3", "expected": "ok" }
+    ],
+    "starterCode": {
+      "java": "import org.junit.jupiter.api.*;\nclass Calc { static int sum(int a,int b){ return a+b; } }\nclass CalcTest {\n  @Test void adds(){ Assertions.assertEquals(5, Calc.sum(2,3)); }\n}\nclass Notes { public static void main(String[] a){ System.out.println(\"ok\"); } }"
+    },
+    "explain": "Use @Test and Assertions.assertEquals(expected, actual)."
+  },
+  {
+    "id": "junit5-parameterized",
+    "title": "Parameterized Test",
+    "topic": "JUnit5",
+    "difficulty": "Medium",
+    "statement": "Write a parameterized test with @CsvSource for reverse strings.",
+    "examples": [
+      { "input": "\"gokul,lukog\"", "output": "ok" }
+    ],
+    "tests": [
+      { "input": "csv reverse check", "expected": "ok" }
+    ],
+    "starterCode": {
+      "java": "import org.junit.jupiter.params.*; import org.junit.jupiter.params.provider.*; import org.junit.jupiter.api.*;\nclass Util { static String rev(String s){ return new StringBuilder(s).reverse().toString(); } }\nclass UtilTest {\n  @ParameterizedTest\n  @CsvSource({\"gokul,lukog\",\"abc,cba\"})\n  void revWorks(String in, String out){ Assertions.assertEquals(out, Util.rev(in)); }\n}\nclass Notes { public static void main(String[] a){ System.out.println(\"ok\"); } }"
+    },
+    "explain": "Use @ParameterizedTest with @CsvSource for inline data."
+  },
+  {
+    "id": "mockito-when-then",
+    "title": "Mockito when/thenReturn",
+    "topic": "Mockito",
+    "difficulty": "Medium",
+    "statement": "Stub a dependency call with Mockito.when(...).thenReturn(...).",
+    "examples": [
+      { "input": "Service.getUser(42) returns 'Gokul'", "output": "ok" }
+    ],
+    "tests": [
+      { "input": "mock return", "expected": "ok" }
+    ],
+    "starterCode": {
+      "java": "import static org.mockito.Mockito.*; import org.junit.jupiter.api.*;\ninterface Repo{ String getUser(int id); }\nclass Service{ private final Repo r; Service(Repo r){this.r=r;} String greet(int id){ return \"Hi \"+r.getUser(id); } }\nclass ServiceTest{\n  @Test void greets(){ Repo repo = mock(Repo.class); when(repo.getUser(42)).thenReturn(\"Gokul\"); Service s = new Service(repo); Assertions.assertEquals(\"Hi Gokul\", s.greet(42)); }\n}\nclass Notes { public static void main(String[] a){ System.out.println(\"ok\"); } }"
+    },
+    "explain": "Mock interfaces with mock(); define behavior with when(...).thenReturn(...)."
+  },
+  {
+    "id": "mockito-verify",
+    "title": "Mockito verify()",
+    "topic": "Mockito",
+    "difficulty": "Easy",
+    "statement": "Verify that a method was called exactly once.",
+    "examples": [
+      { "input": "verify repo.save called once", "output": "ok" }
+    ],
+    "tests": [
+      { "input": "verify once", "expected": "ok" }
+    ],
+    "starterCode": {
+      "java": "import static org.mockito.Mockito.*; import org.junit.jupiter.api.*;\ninterface Repo{ void save(String s); }\nclass Svc{ private final Repo r; Svc(Repo r){this.r=r;} void doWork(){ r.save(\"X\"); } }\nclass SvcTest{ @Test void savesOnce(){ Repo r = mock(Repo.class); Svc s = new Svc(r); s.doWork(); verify(r, times(1)).save(\"X\"); } }\nclass Notes { public static void main(String[] a){ System.out.println(\"ok\"); } }"
+    },
+    "explain": "Use verify(mock, times(1)).method(args)."
+  }
+]

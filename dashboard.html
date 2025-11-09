@@ -3,30 +3,41 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Dashboard • Java Core</title>
+  <title>Dashboard • Learning Progress</title>
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
 <header class="site-header">
   <div class="container nav">
-    <a class="brand" href="index.html">Gokul</a>
+    <a class="brand" href="index.html">GOKULPRASATH K</a>
     <nav>
       <a href="java-core.html">Java Core</a>
+      <a href="maven-junit.html">Maven & JUnit</a>
       <a href="index.html#projects">Projects</a>
-      <a href="index.html#contact">Contact</a>
     </nav>
   </div>
 </header>
 
 <main class="container section">
   <h1>Performance Dashboard</h1>
-  <div id="summary" class="cards"></div>
 
-  <h2 style="margin-top:24px;">Per-Topic Performance</h2>
-  <div id="topics" class="cards"></div>
+  <!-- Overall -->
+  <section>
+    <h2>Overall Summary</h2>
+    <div id="overall" class="cards-grid"></div>
+  </section>
 
-  <h2 style="margin-top:24px;">Recent Activity</h2>
-  <div id="recent" class="panel"><ul id="recentList" class="problem-list"></ul></div>
+  <!-- Per track -->
+  <section style="margin-top:24px;">
+    <h2>Tracks</h2>
+    <div id="tracks" class="cards-grid"></div>
+  </section>
+
+  <!-- Recent -->
+  <section style="margin-top:24px;">
+    <h2>Recent Activity</h2>
+    <ul id="recent" class="recent-list"></ul>
+  </section>
 </main>
 
 <footer class="site-footer">
@@ -36,12 +47,15 @@
 <script src="js/core.js"></script>
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
-  Core.renderDashboard({
-    problemsUrl: 'data/java-core.json',
-    trackKey: 'jc_progress',
-    summaryEl: '#summary',
-    topicsEl: '#topics',
-    recentEl: '#recentList'
+
+  Core.renderDashboardMulti({
+    sections: [
+      { title: 'Java Core',        problemsUrl: 'data/java-core.json',   trackKey: 'jc_progress' },
+      { title: 'Maven & JUnit',    problemsUrl: 'data/maven-junit.json', trackKey: 'mj_progress' }
+    ],
+    overallEl: '#overall',
+    tracksEl:  '#tracks',
+    recentEl:  '#recent'
   });
 </script>
 </body>

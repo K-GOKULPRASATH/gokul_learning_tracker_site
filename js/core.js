@@ -32,6 +32,7 @@ const Core = (() => {
     return (s || '').trim().replace(/\s+/g, ' ').toLowerCase();
   }
 
+
   function renderProblem(viewEl, p, trackKey, progress) {
     // Build the problem view + code editor panel (no input boxes)
     viewEl.innerHTML = `
@@ -50,6 +51,7 @@ const Core = (() => {
     <div id="outputBox" class="panel" style="margin-top:10px;">Output will appear here...</div>
   </div>
 `;
+window.CURRENT_PROBLEM = p;
 
 if (typeof window.setupEditor === 'function') window.setupEditor();
 
@@ -148,6 +150,73 @@ if (typeof window.setupEditor === 'function') window.setupEditor();
         }).join('')
       : `<li class="muted">No activity yet. Solve something in <a href="java-core.html">Java Core</a>.</li>`;
   }
+
+  // ---- MULTI-TRACK DASHBOARD ----
+async function renderDashboardMulti({ sections, overallEl, tracksEl, recentEl }) {
+  // sections: [{title, problemsUrl, trackKey}]
+  const overall = { totalProblems: 0, attempts: 0, passes: 0, solved: 0 };
+  const recent = [];
+
+  // render each track card
+  const cards = await Promise.all(sections.map(async (s) => {
+    const problems = await loadJson(s.problemsUrl);
+    const progress = Store.get(s.trackKey, {});
+    const total = problems.length;
+
+    let attempts = 0, passes = 0, solved = 0;
+    Object.values(progress).forEach(st => { attempts += st.attempts; passes += st.passes; if (st.passes > 0) solved++; });
+
+    // recent per track
+    Object.entries(progress)
+      .filter(([, st]) => st.last)
+      .forEach(([pid, st]) => {
+        recent.push({ when: st.last, pid, track: s.title, passed: st.passes > 0,
+          title: (problems.find(p=>p.id===pid)?.title) || pid });
+      });
+
+    // accumulate overall
+    overall.totalProblems += total;
+    overall.attempts += attempts;
+    overall.passes += passes;
+    overall.solved += solved;
+
+    const acc = attempts ? Math.round((passes/attempts)*100) : 0;
+    return `
+      <article class="card">
+        <h3>${s.title}</h3>
+        <p><b>${solved}</b> / ${total} solved</p>
+        <p class="muted">Attempts: ${attempts} • Passes: ${passes} • Acc: ${acc}%</p>
+      </article>
+    `;
+  }));
+
+  // overall summary
+  const accOverall = overall.attempts ? Math.round((overall.passes/overall.attempts)*100) : 0;
+  const $overall = document.querySelector(overallEl);
+  if ($overall) {
+    $overall.innerHTML = `
+      <article class="card"><h3>Total Solved</h3><p><b>${overall.solved}</b> / ${overall.totalProblems}</p></article>
+      <article class="card"><h3>Attempts</h3><p><b>${overall.attempts}</b></p></article>
+      <article class="card"><h3>Passes</h3><p><b>${overall.passes}</b></p></article>
+      <article class="card"><h3>Accuracy</h3><p><b>${accOverall}%</b></p></article>
+    `;
+  }
+
+  // per-track cards
+  const $tracks = document.querySelector(tracksEl);
+  if ($tracks) $tracks.innerHTML = cards.join('');
+
+  // unified recent (latest 10)
+  recent.sort((a,b)=>b.when-a.when);
+  const $recent = document.querySelector(recentEl);
+  if ($recent) {
+    $recent.innerHTML = recent.slice(0,10).map(r =>
+      `<li><span>${r.passed?'✅':'🟡'}</span> ${r.title}
+        <small class="muted">• ${r.track} • ${new Date(r.when).toLocaleString()}</small></li>`
+    ).join('') || `<li class="muted">No activity yet.</li>`;
+  }
+}
+
 
   return { initPractice, renderDashboard };
 })();
