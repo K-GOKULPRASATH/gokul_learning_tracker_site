@@ -3,13 +3,30 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Dashboard • Learning Progress</title>
+  <title>Dashboard • Gokul</title>
   <link rel="stylesheet" href="styles.css"/>
+  <style>
+    /* quick local styles for GitHub-like layout (paste to styles.css later) */
+    .dash-grid { display:flex; gap:24px; align-items:flex-start; }
+    .left-col { width:300px; flex:0 0 300px; }
+    .profile-card { background:var(--panel); padding:20px; border-radius:12px; text-align:left; }
+    .profile-avatar { width:180px; height:180px; border-radius:50%; object-fit:cover; display:block; margin:0 auto 12px; border:6px solid var(--panel-bg, #0b0f13); }
+    .profile-name { text-align:center; font-weight:700; font-size:20px; margin:6px 0; }
+    .repos-grid { display:grid; grid-template-columns:1fr; gap:10px; margin-top:12px; }
+    .repo-card { padding:12px; border-radius:8px; background:var(--panel); }
+    .contrib-box { background:var(--panel); padding:12px; border-radius:10px; }
+    .heat { display:grid; grid-template-columns: repeat(53, 10px); gap:4px; }
+    .heat .cell { width:10px; height:10px; background:#111; border-radius:2px; }
+    .muted { color: #9aa0a6; font-size:13px; }
+    .activity-list { margin-top:12px; list-style:none; padding:0; }
+    .activity-list li { padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.02); }
+    .btn { background:#0a84ff; color:#fff; padding:6px 10px; border-radius:8px; text-decoration:none; display:inline-block; }
+  </style>
 </head>
 <body>
 <header class="site-header">
   <div class="container nav">
-    <a class="brand" href="index.html">GOKULPRASATH K</a>
+    <a class="brand" href="index.html">Gokul</a>
     <nav>
       <a href="java-core.html">Java Core</a>
       <a href="maven-junit.html">Maven & JUnit</a>
@@ -19,25 +36,63 @@
 </header>
 
 <main class="container section">
-  <h1>Performance Dashboard</h1>
+  <div class="dash-grid">
+    <!-- LEFT column: profile + pinned repos -->
+    <aside class="left-col">
+      <div class="profile-card">
+        <!-- change src to your avatar file or GitHub avatar link -->
+        <img id="avatarImg" class="profile-avatar" src="images\My profile image.jpg" alt="avatar"/>
+        <div class="profile-name" id="profileName">GOKULPRASATH</div>
+        <div class="muted" id="profileHandle">K-GOKULPRASATH</div>
+        <div style="margin-top:12px; text-align:center;">
+          <a href="https://github.com/K-GOKULPRASATH" target="_blank" class="btn">View GitHub</a>
+        </div>
 
-  <!-- Overall -->
-  <section>
-    <h2>Overall Summary</h2>
-    <div id="overall" class="cards-grid"></div>
-  </section>
+        <div style="margin-top:16px;">
+          <h4 style="margin:0 0 8px 0;">Popular repositories</h4>
+          <div id="repoList" class="repos-grid"></div>
+        </div>
+      </div>
 
-  <!-- Per track -->
-  <section style="margin-top:24px;">
-    <h2>Tracks</h2>
-    <div id="tracks" class="cards-grid"></div>
-  </section>
+      <div style="margin-top:14px;" class="profile-card">
+        <h4 style="margin:0 0 10px 0;">Highlights</h4>
+        <div class="muted">Local progress and recent activity from this site.</div>
+      </div>
+    </aside>
 
-  <!-- Recent -->
-  <section style="margin-top:24px;">
-    <h2>Recent Activity</h2>
-    <ul id="recent" class="recent-list"></ul>
-  </section>
+    <!-- RIGHT column: main content -->
+    <section style="flex:1">
+      <h1 style="margin-top:0">Dashboard</h1>
+
+      <!-- POPULAR REPOS (4 boxes) -->
+<section style="margin:18px 0;">
+  <h3 style="margin:0 0 10px 0;">Popular repositories</h3>
+  <div id="popularRepos" class="repos-grid-2x2"></div>
+</section>
+
+
+      <!-- Contributions box -->
+      <div class="contrib-box">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <h3 style="margin:0;">Contributions</h3>
+            <div class="muted">Activity from practice attempts (local)</div>
+          </div>
+          <div class="muted">2025</div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <div id="contribHeat" class="heat"></div>
+        </div>
+      </div>
+
+      <!-- Activity feed -->
+      <div style="margin-top:18px;">
+        <h3>Contribution activity</h3>
+        <ul id="activityFeed" class="activity-list"></ul>
+      </div>
+    </section>
+  </div>
 </main>
 
 <footer class="site-footer">
@@ -48,15 +103,203 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  Core.renderDashboardMulti({
-    sections: [
-      { title: 'Java Core',        problemsUrl: 'data/java-core.json',   trackKey: 'jc_progress' },
-      { title: 'Maven & JUnit',    problemsUrl: 'data/maven-junit.json', trackKey: 'mj_progress' }
-    ],
-    overallEl: '#overall',
-    tracksEl:  '#tracks',
-    recentEl:  '#recent'
+  // ------------- fetch & render GitHub repos (popular) -------------
+  async function loadAndRenderRepos(username='K-GOKULPRASATH') {
+    try {
+      const res = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`);
+      if(!res.ok) throw new Error('GitHub API rate or CORS');
+      const list = await res.json();
+      const out = document.getElementById('repoList');
+      out.innerHTML = list.slice(0,6).map(r=>`
+        <div class="repo-card">
+          <a href="${r.html_url}" target="_blank" style="text-decoration:none;color:inherit;">
+            <strong>${r.name}</strong>
+            <div class="muted" style="margin-top:6px;">${r.description || ''}</div>
+            <div class="muted" style="margin-top:8px;">${r.language || ''}</div>
+          </a>
+        </div>`).join('');
+    } catch(err) {
+      console.warn('Repo load failed:', err);
+      document.getElementById('repoList').innerHTML = '<div class="muted">Failed to load repos (rate limit?)</div>';
+    }
+  }
+
+  // ------------- contributions heat from local progress -------------
+  // Build a 365-cell grid (53 columns x 7 rows style); color intensity by attempts at date
+  function renderLocalHeat(trackKeys = ['jc_progress','mj_progress']) {
+    // gather timestamps for all attempts from localStorage
+    const counts = {}; // dayKey -> count
+    trackKeys.forEach(key => {
+      const p = JSON.parse(localStorage.getItem(key) || '{}');
+      Object.values(p).forEach(stat => {
+        if (!stat.last) return;
+        const d = new Date(stat.last);
+        const day = d.toISOString().slice(0,10);
+        counts[day] = (counts[day]||0) + stat.attempts;
+      });
+    });
+
+    // prepare 365 days back
+    const heatEl = document.getElementById('contribHeat');
+    heatEl.innerHTML = '';
+    const today = new Date();
+    for (let i = 364; i >= 0; i--) {
+      const d = new Date(); d.setDate(today.getDate() - i);
+      const dayKey = d.toISOString().slice(0,10);
+      const c = counts[dayKey] || 0;
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      // choose color intensity
+      if (c >= 5) cell.style.background = '#216e40';
+      else if (c >= 3) cell.style.background = '#2c9a5f';
+      else if (c >= 1) cell.style.background = '#6bd37a';
+      else cell.style.background = '#0f1316';
+      cell.title = dayKey + (c ? ` — ${c} attempt(s)` : '');
+      heatEl.appendChild(cell);
+    }
+  }
+
+  // ------------- activity feed from local progress -------------
+  function renderActivityFromLocal(trackKeys = ['jc_progress','mj_progress']) {
+    const items = [];
+    trackKeys.forEach(key => {
+      const p = JSON.parse(localStorage.getItem(key) || '{}');
+      Object.entries(p).forEach(([pid, stat])=>{
+        if (!stat.last) return;
+        items.push({ id: pid, last: stat.last, attempts: stat.attempts, passes: stat.passes, trackKey: key });
+      });
+    });
+    // sort desc
+    items.sort((a,b)=>b.last - a.last);
+    const feed = document.getElementById('activityFeed');
+    if (items.length === 0) {
+      feed.innerHTML = '<li class="muted">No contribution activity yet — solve some problems in Java Core or Maven & JUnit.</li>';
+      return;
+    }
+    feed.innerHTML = items.slice(0,20).map(it => {
+      const date = new Date(it.last).toLocaleString();
+      const trackName = it.trackKey === 'jc_progress' ? 'Java Core' : 'Maven & JUnit';
+      return `<li><strong>${it.attempts} attempt(s)</strong> • ${it.passes} passed — <span class="muted">${trackName}</span><div class="muted">${date}</div></li>`;
+    }).join('');
+  }
+
+  // init
+  loadAndRenderRepos();
+  renderLocalHeat();
+  renderActivityFromLocal();
+
+/***********************
+ * TRACK CARDS + NAV
+ * Replace the old renderPopularRepos function with this.
+ ***********************/
+
+const TRACKS = [
+  {
+    key: 'java-core',
+    title: 'Java Core',
+    desc: 'Core Java topics, problem practice, basics → OOP → Collections',
+    page: 'java-core.html',
+    trackKey: 'jc_progress'
+  },
+  {
+    key: 'maven-junit',
+    title: 'Maven & JUnit',
+    desc: 'Build tools, unit testing with JUnit & Mockito, CI-ready',
+    page: 'maven-junit.html',
+    trackKey: 'mj_progress'
+  },
+  {
+    key: 'spring-boot',
+    title: 'Spring Boot',
+    desc: 'Spring Boot fundamentals, REST APIs, and microservices setup',
+    page: 'springboot.html',
+    trackKey: 'sb_progress'
+  },
+  {
+    key: 'aws',
+    title: 'AWS',
+    desc: 'Cloud deployment, EC2, S3, Lambda integrations and monitoring',
+    page: 'aws.html',
+    trackKey: 'aws_progress'
+  }
+];
+
+
+/**
+ * Render the four track cards (like GitHub "Popular repositories" boxes).
+ * Each card will be clickable and open that track's tracker/dashboard.
+ */
+function renderTrackCards(targetId='popularRepos') {
+  const out = document.getElementById(targetId);
+  if (!out) return;
+  out.innerHTML = TRACKS.map(t => `
+    <div class="repo-card-lg" data-track="${t.key}" role="button" tabindex="0" style="cursor:pointer">
+      <div>
+        <div class="repo-title">${t.title}</div>
+        <div class="repo-desc">${t.desc}</div>
+      </div>
+      <div class="repo-meta"><span class="muted">Tracker</span></div>
+    </div>
+  `).join('');
+
+  // add click / keyboard handlers
+  out.querySelectorAll('.repo-card-lg').forEach(card => {
+    card.addEventListener('click', () => {
+      const key = card.dataset.track;
+      openTracker(key);
+    });
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        card.click();
+      }
+    });
   });
+}
+
+/**
+ * Called when user clicks a track card.
+ * If showTrackDetail is available (in-page drilldown), call it.
+ * Otherwise navigate to dashboard.html?track=KEY (the dashboard page handles query param).
+ */
+function openTracker(key) {
+  const t = TRACKS.find(x => x.key === key);
+  if (!t) return;
+
+  // If page implements in-page track detail handler, use it:
+  if (typeof showTrackDetail === 'function') {
+    // ensure the dashboard can show track data (UI we added earlier)
+    // showTrackDetail should call Core.renderTrackDetail, etc.
+    showTrackDetail(key);
+    // Optionally, render the track's contribution table in the track view:
+    // If you use renderContributionGrid, call it for this single track:
+    // inside showTrackDetail(key)
+window.history.replaceState(null, '', `dashboard.html?track=${key}`);
+Core.renderTrackDetail({ /* ... */ });       // existing detailed track summary/problems
+renderContributionGrid({ trackKeys: [theTrack.trackKey] }); // renders grid for that track only
+
+    if (typeof renderContributionGrid === 'function') {
+      // render contribution grid for only this track
+      renderContributionGrid({ trackKeys: [t.trackKey] });
+    }
+    return;
+  }
+
+  // fallback: navigate to dashboard with query param (dashboard.html must handle it)
+  const url = `dashboard.html?track=${encodeURIComponent(key)}`;
+  window.location.href = url;
+}
+
+// call on DOM ready
+window.addEventListener('DOMContentLoaded', () => {
+  // Render custom track cards instead of GitHub repos
+  renderTrackCards('popularRepos');
+
+  // Keep the aggregate contribution grid on top-level dashboard (already set earlier).
+  // When user clicks a track card, openTracker() will either drilldown or navigate.
+});
+
+
 </script>
 </body>
 </html>
