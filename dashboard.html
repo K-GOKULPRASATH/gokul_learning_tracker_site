@@ -26,7 +26,7 @@
 <body>
 <header class="site-header">
   <div class="container nav">
-    <a class="brand" href="index.html">Gokul</a>
+    <a class="brand" href="index.html">GOKULPRASATH K</a>
     <nav>
       <a href="java-core.html">Java Core</a>
       <a href="maven-junit.html">Maven & JUnit</a>
@@ -64,11 +64,16 @@
     <section style="flex:1">
       <h1 style="margin-top:0">Dashboard</h1>
 
-      <!-- POPULAR REPOS (4 boxes) -->
-<section style="margin:18px 0;">
-  <h3 style="margin:0 0 10px 0;">Popular repositories</h3>
-  <div id="popularRepos" class="repos-grid-2x2"></div>
+<!-- ANALYTICS: stats + activity chart -->
+<section id="analyticsSection" style="margin:18px 0;">
+  <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:12px;">
+    <div style="flex:1">
+      <h3 style="margin:0 0 8px 0;">Learning Analytics</h3>
+      <div id="analyticsCards" class="cards-grid"></div>
+    </div>
+  </div>
 </section>
+
 
 
       <!-- Contributions box -->
@@ -197,32 +202,37 @@ const TRACKS = [
   {
     key: 'java-core',
     title: 'Java Core',
-    desc: 'Core Java topics, problem practice, basics → OOP → Collections',
+    icon: '🧩',
+    desc: 'Master the fundamentals of Java — OOP, collections, exceptions, and more.',
     page: 'java-core.html',
     trackKey: 'jc_progress'
   },
   {
     key: 'maven-junit',
     title: 'Maven & JUnit',
-    desc: 'Build tools, unit testing with JUnit & Mockito, CI-ready',
+    icon: '🧪',
+    desc: 'Build tools and testing: Maven project structure, JUnit5, and Mockito basics.',
     page: 'maven-junit.html',
     trackKey: 'mj_progress'
   },
   {
     key: 'spring-boot',
     title: 'Spring Boot',
-    desc: 'Spring Boot fundamentals, REST APIs, and microservices setup',
+    icon: '🌱',
+    desc: 'Learn Spring Boot, REST API development, and simple microservice setup.',
     page: 'springboot.html',
     trackKey: 'sb_progress'
   },
   {
     key: 'aws',
     title: 'AWS',
-    desc: 'Cloud deployment, EC2, S3, Lambda integrations and monitoring',
+    icon: '☁️',
+    desc: 'Deploy apps to the cloud using AWS EC2, S3, and Lambda with monitoring.',
     page: 'aws.html',
     trackKey: 'aws_progress'
   }
 ];
+
 
 
 /**
@@ -300,6 +310,28 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 
+
+
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const img = document.querySelector('.profile-avatar') || document.querySelector('#profileAvatar') || document.querySelector('img.avatar');
+  if (img) {
+    img.classList.add('avatar'); // ensure class exists
+    // enforce inline style as fallback
+    img.style.border = img.style.border || '3px solid #00bfff';
+    img.style.boxShadow = img.style.boxShadow || '0 0 10px rgba(0,191,255,0.5)';
+  }
+});
+
+// also handle when navigating from other pages (Live Server history navigation)
+window.addEventListener('pageshow', () => {
+  const img = document.querySelector('.profile-avatar');
+  if (img) img.classList.add('avatar');
+});
+</script>
+
+
 </body>
 </html>
